@@ -1,24 +1,30 @@
 const express = require('express');
+const axios = require('axios');
 const router = express.Router();
-const Essentia = require('essentia.js');
 
 // Route to handle audio analysis
-router.post('/analyze', (req, res) => {
-    const { audioBuffer } = req.body;
+router.post('/analyze', async (req, res) => {
+    const { audioUrl } = req.body;
 
-    // Analyze the audio with Essentia.js
-    const essentia = new Essentia();
-    const energy = essentia.RMS(essentia.arrayToVector(audioBuffer));
+    try {
+        // Fetch the audio data from the provided URL
+        const response = await axios.get(audioUrl, { responseType: 'arraybuffer' });
 
-    // Placeholder for other attributes (implement as needed)
-    const attributes = {
-        energy: energy,
-        danceability: 0, // Example placeholder
-        happiness: 0,    // Example placeholder
-        // Add more attributes here
-    };
+        // Process the audio data (placeholder)
+        const audioBuffer = response.data;
 
-    res.json(attributes);
+        // Placeholder for actual analysis
+        const attributes = {
+            energy: 0, // Replace with actual calculation
+            danceability: 0, // Replace with actual calculation
+            happiness: 0, // Replace with actual calculation
+        };
+
+        res.json(attributes);
+    } catch (error) {
+        console.error('Error fetching or analyzing audio:', error.message);
+        res.status(500).send('Failed to process audio');
+    }
 });
 
 module.exports = router;

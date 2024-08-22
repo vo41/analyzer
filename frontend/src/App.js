@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import WaveVisualizer from './components/WaveVisualizer';
-import TrackAttributes from './components/TrackAttributes';
 import axios from 'axios';
 
 function App() {
@@ -13,6 +11,7 @@ function App() {
             setAttributes(response.data);
         } catch (error) {
             console.error('Error analyzing track:', error);
+            alert('Failed to fetch or analyze the audio. Please check the URL or try again later.');
         }
     };
 
@@ -26,8 +25,14 @@ function App() {
                 onChange={(e) => setAudioUrl(e.target.value)}
             />
             <button onClick={handleAnalyze}>Analyze</button>
-            <WaveVisualizer audioUrl={audioUrl} />
-            <TrackAttributes attributes={attributes} />
+            <div>
+                <h3>Track Attributes</h3>
+                <ul>
+                    <li>Energy: {attributes.energy}</li>
+                    <li>Danceability: {attributes.danceability}</li>
+                    <li>Happiness: {attributes.happiness}</li>
+                </ul>
+            </div>
         </div>
     );
 }
